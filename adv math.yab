@@ -1,0 +1,124 @@
+1
+//this is an edited version of my second successful program including the hello world application
+clear screen
+print"To start you off we are giving you 20,000 coins"
+wait(5)
+print"The Integer Math Game by: Tate Testa"
+//Round One-----------------------------------------------------------------
+print color("blue") "ROUND 1"
+print"type the number that is the sum of 5 and -4?"
+input a
+//check answer
+if a<1 then
+print"sorry, that was not the correct answer. press 1 to try again."
+end if
+if a>1 then
+print"sorry, that is the wrong answer. press 1 to try again."
+end if
+if a=1 then
+print"nice job you got it!"
+end if
+if a=1 then
+print"would you like to answer another question?"
+end if
+//2nd round!
+input abc
+if abc=yes then
+//2nd round question
+print color("blue") "ROUND 2"
+print"what is the product of -5 and -10?"
+end if
+input f
+if f>50 then
+print"that is wrong. remember the multiplication/division rules"
+clear screen
+goto 1
+end if
+if f<50 then
+print"that is wrong. remember the multiplication/division rules"
+clear screen
+end if
+if f=50 then
+print"are you sure this is the correct answer"
+input abc
+if abc=yes then
+print"you are correct!"
+//start round 3-------------------------------------------------------------
+print color("blue") "ROUND 3"
+print"what is the quotient of 10 and -2?"
+end if
+if abc=no then
+print"it is correct, so you need to gain some self confidence"
+//start round 3-------------------------------------------------------------
+print color("blue") "ROUND 3"
+print"what is the quotient of 10 and -2?"
+end if
+input x
+if x=-5 then
+print color("green") "nice one, you got it right"
+end if
+if x<-5 then
+print color("red")"wrong!"
+goto 1
+clear screen
+end if
+if x>-5 then
+print color("red")"wrong!"
+goto 1
+clear screen
+end if
+end if
+//START ROUND 4!
+print color("blue") "ROUND 4" 
+print"a helicoptor is hovering 132ft over the ocean a diving bell sits at the bottom of the 245ft deep sea if the helicoptor has 314 yards of rope with a hook at the end then(assuming that the helicoptor has enough thrust to lift the bell) will the helicopter be able to lift the bell?"
+input z
+if z=yes then
+print"wow, you can solve word problems"
+print color("blue")
+print"time to pull out the big guns!"
+print"Evaluate this expression"
+print"(-52*2/(12-2)+25"
+end if
+if z=no then 
+print color("red") "This is Incorrect!"
+input p
+if p=14.6 then
+print"boss defeated. turns out his weakness is numbers"
+print color("green")"congrats! you defeated the game/boss!"
+print"here is your prize you`ll never guess" 
+wait(2)
+print"it`s a circle!"
+open window 200,200
+clear fill circle 50,50,20
+print"~Oh, Great, more math!~"
+wait(1)
+print"thank you for defeating the boss. Here is your prize:"
+print color("green") "+20,000 coins!"
+print"your current coin balance is"
+print color("blue") "40,000"
+open window 300,300
+//LOOP # 1
+for n=1 to 20000 
+ x=ran(300)
+  y=ran(300)
+  fill circle x,y,10
+  clear fill circle x,y,8
+next n
+end if
+//END LOOP
+wait(2)
+close window
+end if
+if p<14.6 then
+clear screen
+print"you lost!"
+print"the boss stole all of your coins!"
+print"your current coin ballance is"
+print color("red") "0 coins"
+print"better luck next time"
+print color("red") "GAME OVER"
+wait(5)
+clear screen
+print color("red") "if you want to try again exit this program and restart"
+print"WARNING:the game will be reset"
+end if
