@@ -28,7 +28,7 @@ namespace mutilator {
 
 
 
-		char* ret = (char*) calloc(strlen(cur_name) + 3 + L_REF_MUTILATOR, sizeof(char));
+		char* ret = (char*) calloc(strlen(cur_name) + 3 + L_REF_MUTILATOR - i, sizeof(char));
 
 		strcat(ret, " ");
 		strcat(ret, cur_name);
