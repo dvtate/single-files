@@ -1,0 +1,148 @@
+### Pong.ys
+## played in terminal
+## 200x50 grid
+## 
+
+
+# this project has been abandoned as the frame-rate was too slow
+
+
+{ # change ball slope/speed when it bounces off a surface
+	{ # not bouncing off anything, just need to change trajectory	
+		
+	} else { # bouncing off left paddle
+		{ # random bolean false go to right
+			$ball_slope (random 5 * 1 + int, random 5 * 1 + int) =
+		} else { # random boolean true go to left
+			$ball_slope (random -5 * 1 - int, random 5 * 1 + int) =
+		} random int if
+		"ball_slope:" print $ball_slope println
+	} $ball_pos 0 ] 1   == elseif { # bouncing off left bumper
+
+	} $ball_pos 0 ] 199 == elseif { # bouncing off right bumper
+
+	} $ball_pos 1 ] 1   == elseif { # bouncing off top wall
+
+	} $ball_pos 1 ] 49  == if # bouncing off bottom wall
+
+
+} ($ball_slope, ($ball_pos, { $ball_pos (100,25) = })) lam $ball_bounce =
+
+{ # update ball's pos
+	# if the ball is on the edge, bounce
+	{ 
+		($ball_slope, $ball_pos) $ball_bounce @	
+	}
+		$ball_pos 0 ] 1   <=
+		$ball_pos 0 ] 199 >= ||
+		$ball_pos 1 ] 1   <= ||
+		$ball_pos 1 ] 49  >= ||
+	if
+
+	$ball_pos 0 ] $ball_slope 0 ] +=
+	$ball_pos 1 ] $ball_slope 1 ] +=
+} ($ball_pos, $ball_slope) lam $update_ball =
+
+
+# paddle stuff
+{
+	$input getch =
+	{ # p1 down
+		{ } else { # if safe to move
+			$p1_pos -- 
+		} $p1_pos 0 > if		
+	} "z" $input == elseif { # p1 up
+		{} else {
+			$p1_pos ++ 
+		} $p1_pos 40 < if		
+	} "a" $input == elseif { # p2 down
+		{ # if its safe to move
+			$p2_pos -- 
+		} $p2_pos 0 > if
+	} "/" $input == elseif { # p2 up
+		{ # if safe to move
+			$p2_pos ++
+		} $p2_pos 40 < if
+	} "'" $input == elseif { # reset ball
+		($ball_slope) $ball_bounce @
+	} " " $input == if
+		
+} ($p1_pos , $p2_pos, $ball_slope) lam $update_paddles = 
+
+
+# render.ys
+
+{ # draw the game to the screen
+
+	# clear screen
+	cls
+
+	{ # print top border
+		"====" print
+	} 0 50 range $xc foreach
+	"" println
+
+
+	{ # foreach row
+
+		{
+			" " print
+		} else {
+			"#" print
+		} $r $p1_pos - 10 < if
+		
+		{
+			{
+				" " print
+			} 0 198 range $x foreach
+		} else {
+			{ # print spaces until we get to the ball
+				" " print
+			} 0 $ball_pos 0 ] range $x foreach
+			
+			# print the ball
+			"O" print
+
+			{ # print spaces to the end
+				" " print
+			} $ball_pos 0 ] 197 range $x foreach
+		} $r $ball_pos 1 ] == if
+
+		{
+			" " print
+		} else {
+			"#" print
+		} $r 10 + $p1_pos > if
+
+		"" println
+	} 0 50 range $r foreach
+
+	{ # print bottom border
+		"====" print
+	} 0 50 range $xc foreach
+	"" println
+
+
+
+} ($p1_pos, $p2_pos, $p1_score, $p2_score, $ball_pos, ($msg, { $msg "" = })) lam $draw_game =
+
+
+# global initializations
+$p1_pos 0 =
+$p1_score 0 =
+
+$p2_pos 0 =
+$p2_score 0 =
+
+
+$ball_pos (100, 25) =	# middle of screen
+$ball_slope (0, 0) =	# x-change, y-change
+
+($ball_slope) $ball_bounce @
+"ball_slope:" print $ball_slope println
+{
+	($p1_pos, $p2_pos, $p1_score, $p2_score, $ball_pos, "hello") $draw_game @
+	# ($p1_pos , $p2_pos, $ball_slope) $update_paddles @
+	($ball_pos, $ball_slope) $update_ball @
+	500 sleep
+} { true } while
