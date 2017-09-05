@@ -1,6 +1,5 @@
-
-'!!!REBUILD THIS MOTHER_FUCKER FROM SCRATCH
-
+' note: I don't have the copy of this program that actually works
+'	IDK I might rewrite it later if I have nothing better to do..
 
 ''''''
 'version#3
@@ -31,7 +30,7 @@ On Error Resume Next
 
 Do
  '1st equation
- DoDoDoDoDoDoDoDoDo 'dafuq????
+ Do 'error here ???
 	intloop = 7
  	type1 = InputBox("Is the first equation in: (a)-slope-intercept form, or (b)-standard form? (input the correct letter)", "equation type", "equation type")
  	'slope intercept
