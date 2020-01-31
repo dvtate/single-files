@@ -1,5 +1,4 @@
 // https://www.hackerrank.com/challenges/attribute-parser/problem?isFullScreen=true
-
 #include <bits/c++config.h>
 #include <cmath>
 #include <cstddef>
@@ -10,6 +9,7 @@
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
+#include <sstream>
 
 class DOMNode {
 public:
@@ -23,8 +23,9 @@ public:
 
     // using hr syntax
     std::string queryMembers(std::string q) {
+        //std::cout <<"qm: " <<q <<std::endl;
         size_t i = 0;
-        while (i > q.length() && q[i] != '.' && q[i] != '~' && q[i] != ' ')
+        while (i < q.length() && q[i] != '.' && q[i] != '~' && q[i] != ' ')
             i++;
         
         std::string name = q.substr(0, i);
@@ -39,15 +40,32 @@ public:
         if (q[i] == '~')
             return it->queryAttributes(q.substr(i, q.length() - i));
         else
-            return it->queryMembers(q.substr(i, q.length() - i));
+            return it->queryMembers(q.substr(i + 1, q.length() - i));
     }
 
     std::string queryAttributes(std::string q) {
+        //std::cout <<"qa: " <<q <<std::endl;
         try {
             return attributes.at(q.substr(1, q.length()-1));
         } catch(const std::out_of_range& e) {
             return "Not Found!";
         }
+    }
+
+    std::string str(unsigned int depth = 0) {
+        std::string ret;
+        for (unsigned int i = 0; i < depth;i++)
+            ret += '\t';
+        ret += this->tag_name;
+        for (const auto& p : this->attributes) {
+            ret += '~';
+            ret += p.first;
+        }
+        for (DOMNode& m : this->members) {
+            ret += '\n';
+            ret += m.str(depth + 1);
+        }
+        return ret;
     }
 };
 
@@ -140,7 +158,7 @@ namespace HRML {
                 nest.back()->attributes[tokens[i - 1]] = tokens[i + 1];
 
             } else {
-                std::cout <<"UNKNOWN token: " <<tokens[i] <<std::endl;
+                //std::cout <<"UNKNOWN token: " <<tokens[i] <<std::endl;
             }
         }
         return root;
@@ -151,10 +169,11 @@ namespace HRML {
 
 
 int main() {
-
+    std::string line;
+    std::getline(std::cin, line);
+    std::stringstream ss(line);
     int t_lines, q_lines;
-    std::cin >> t_lines >> q_lines;
-
+    ss >>t_lines >>q_lines;
 
     const std::string code = HRML::read(t_lines);
     std::vector<std::string> tokens = HRML::tokenize(code);
@@ -166,7 +185,7 @@ int main() {
         std::cout <<dom.queryMembers(q) <<std::endl;
     }
 
-
+    //std::cout <<dom.str();
     return 0;
 }
 
