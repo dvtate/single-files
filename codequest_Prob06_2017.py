@@ -5,7 +5,7 @@ def icao(char):
 	elif char == 'A' or char == 'a':
 		return "Alpha";
 	elif char == 'B' or char == 'b':
-		return "B";
+		return "Bravo";
 	elif char == 'C' or char == 'c':
 		return "Charlie";
 	elif char == 'D' or char == 'd':
