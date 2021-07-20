@@ -186,11 +186,11 @@ void write_ar_file(char* fname, struct ar_entry* node) {
 // Genreate permissions mask string
 char* file_perm_str(mode_t perm) {
 	static char str[10];
-    snprintf(str, 10, "%c%c%c%c%c%c%c%c%c",
-        (perm & S_IRUSR) ? 'r' : '-', (perm & S_IWUSR) ? 'w' : '-', (perm & S_IXUSR) ? 'x' : '-',
+	snprintf(str, 10, "%c%c%c%c%c%c%c%c%c",
+		(perm & S_IRUSR) ? 'r' : '-', (perm & S_IWUSR) ? 'w' : '-', (perm & S_IXUSR) ? 'x' : '-',
 		(perm & S_IRGRP) ? 'r' : '-', (perm & S_IWGRP) ? 'w' : '-', (perm & S_IXGRP) ? 'x' : '-',
 		(perm & S_IROTH) ? 'r' : '-', (perm & S_IWOTH) ? 'w' : '-', (perm & S_IXOTH) ? 'x' : '-');
-    return str;
+	return str;
 }
 
 // Generate time string like original
