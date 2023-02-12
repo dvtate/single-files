@@ -1,0 +1,26 @@
+\documentclass[a4paper]{article}
+
+%\usepackage{lmodern}    % Latin Modern
+%\usepackage{tgheros}   % Helvetica
+\usepackage{tgtermes}  % Times
+%\usepackage{tgcursor}  % Courier
+
+% adapt default font
+%  * serif:      \rmdefault
+%  * sans-serif: \sfdefault
+%  * monospace:  \ttdefault
+%\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{draftwatermark}
+% see package documentation for further configuration options
+\SetWatermarkText{Confidential}
+\SetWatermarkLightness{0.75}
+\SetWatermarkScale{1.2}
+
+
+\begin{document}
+\pagenumbering{gobble} % remove page numbers
+\mbox{}                % pdflatex refuses to emit an empty page otherwise
+\end{document}
