@@ -14,13 +14,13 @@ function init() {
         
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
-    	'http://ridder.xyz/imgs/corki.png',
-    	'http://ridder.xyz/imgs/corki.png',
-    	'http://ridder.xyz/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
       
-    	'http://ridder.xyz/imgs/corki.png',
-    	'http://ridder.xyz/imgs/corki.png',
-    	'http://ridder.xyz/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
+    	'https://me.dvtt.net/imgs/corki.png',
     ]);
     const geometry = new THREE.BoxGeometry(.4, .4, .4);
     const material = new THREE.MeshLambertMaterial( {
