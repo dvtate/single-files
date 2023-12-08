@@ -6,53 +6,52 @@
 #include <tuple>
 
 // Parse a string to a native type
-template<class T> T parse_entry(const std::string s); // { return T{}; }
-template<> std::string parse_entry<std::string>(std::string s) {
-    return s;
-}
-template<> int parse_entry<int>(std::string s) {
-    return std::stoi(s);
-}
-template<> double parse_entry<double>(std::string s) {
-    return std::stod(s);
-}
-template<> char parse_entry<char>(std::string s) {
-    return s[0];
-}
-template<> float parse_entry<float>(std::string s) {
-    return std::stof(s);
-}
-template<> unsigned long parse_entry<unsigned long>(std::string s) {
-    return std::stoul(s);
+namespace __CSV {
+    template<class T> T parse_entry(const std::string s); // { return T{}; }
+    template<> std::string parse_entry<std::string>(std::string s) {
+        return s;
+    }
+    template<> int parse_entry<int>(std::string s) {
+        return std::stoi(s);
+    }
+    template<> double parse_entry<double>(std::string s) {
+        return std::stod(s);
+    }
+    template<> char parse_entry<char>(std::string s) {
+        return s[0];
+    }
+    template<> float parse_entry<float>(std::string s) {
+        return std::stof(s);
+    }
+    template<> unsigned long parse_entry<unsigned long>(std::string s) {
+        return std::stoul(s);
+    }
 }
 
 // template <class F, class... Args>
-// constexpr void constexpr_foreach(F&& f, Args&&... args)
-// {
+// constexpr void constexpr_foreach(F&& f, Args&&... args) {
 //     (f(std::forward<Args>(args)), ...);
 // }
 
 template <auto Start, auto End, auto Inc, class F>
-constexpr void constexpr_for(F&& f)
-{
-    if constexpr (Start < End)
-    {
-        constexpr auto v = std::integral_constant<decltype(Start), Start>::value;
-        f.template operator()<v>();
+constexpr void constexpr_for(F&& f) {
+    if constexpr (Start < End) {
+        f.template operator()<
+            std::integral_constant<decltype(Start), Start>::value
+        >();
         constexpr_for<Start + Inc, End, Inc>(f);
     }
 }
 
-template<class... Types>
+template<class... ColTypes>
 class CSV {
 public:
     std::string m_file;
 
     std::vector<std::string> m_headers;
 
-    using row_type = std::tuple<Types...>;
+    using row_type = std::tuple<ColTypes...>;
     std::vector<row_type> m_rows;
-
 
     CSV() = default;
 
@@ -107,23 +106,30 @@ public:
                             continue;
                         }
                     }
-                    if (line[i] == ',') {
-                        std::get<r>(row) = parse_entry<std::tuple_element_t<r, row_type>>(
+                    if (line[i] == ',' && is_quoted == 0) {
+                        std::get<r>(row) = __CSV::parse_entry<std::tuple_element_t<r, row_type>>(
                             line.substr(last_i, i - last_i)
                         );
-                        break;
+                        last_i = ++i;
+                        return;
                     }
                     if (is_quoted == line[i]) {
-                        if (i + 1 < line.size() && line[i+1] != ',') {
+                        if (i + 1 < line.size() && line[i+1] != ',')
                             throw std::runtime_error("parse error: expected comma after string");
-                        }
                         is_quoted = 0;
-                        std::get<r>(row) = parse_entry<std::tuple_element_t<r, row_type>>(
+                        std::get<r>(row) = __CSV::parse_entry<std::tuple_element_t<r, row_type>>(
                             line.substr(last_i, i - last_i - 1)
                         );
-                        break;
+                        last_i = ++i;
+                        return;
                     }
                 }
+                
+                // End of line
+                if (i >= line.size())
+                    std::get<r>(row) = __CSV::parse_entry<std::tuple_element_t<r, row_type>>(
+                        line.substr(last_i, i - last_i)
+                    );
                 last_i = ++i;
             });
             this->m_rows.emplace_back(row);
@@ -138,17 +144,26 @@ public:
             ret.push_back(std::get<I>(r));
         return ret;
     }
+
+    row_type& operator[](const size_t i){
+        return m_rows[i];
+    }
+
+    template<size_t Row, size_t Col>
+    std::tuple_element_t<Col, row_type>& get() {
+        return std::get<Col>(m_rows[Row]);
+    }
 };
 
 int main() {
+    // Read csv file "test.csv"
     auto csv = CSV<int, std::string>("test.csv");
-    std::cout <<csv.m_headers.size() <<std::endl;
-    std::cout <<csv.m_rows.size() <<std::endl;
-    constexpr_for<0, 2, 1>([&]<size_t i>() {
+
+    // Print out the values of the csv
+    constexpr_for<0, csv.width(), 1>([&]<size_t i>() {
         std::cout <<csv.m_headers[i] <<": ";
-        for (auto& v : csv.column<i>()) {
+        for (auto& v : csv.column<i>())
             std::cout <<v <<",\t";
-        }
         std::cout <<std::endl;
     });
 }
