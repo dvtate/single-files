@@ -61,6 +61,10 @@ public:
         read_file(m_file);
     }
 
+    inline static constexpr size_t width() {
+        return std::tuple_size<row_type>::value;
+    }
+
     void read_file(const std::string& file) {
         std::ifstream f(file);
 
@@ -79,15 +83,14 @@ public:
             }
         this->m_headers.emplace_back(line.substr(last_i));
 
-        constexpr auto rank = std::tuple_size<row_type>::value;
-        if (this->m_headers.size() != rank) 
+        if (this->m_headers.size() != width()) 
             throw std::runtime_error("Invalid number of columns");
 
         while (std::getline(f, line)) {
             int i = 0;
             int last_i = 0;
             row_type row;
-            constexpr_for<0, rank, 1>([&]<int r>() {
+            constexpr_for<0, width(), 1>([&]<size_t r>() {
                 char is_quoted = 0; // contains quote character or 0 if not quoted
                 if (i >= line.size())
                     throw std::runtime_error("not enough columns");
@@ -126,10 +129,26 @@ public:
             this->m_rows.emplace_back(row);
         }
     }
+
+    template<size_t I>
+    std::vector<std::tuple_element_t<I, row_type>> column() {
+        std::vector<std::tuple_element_t<I, row_type>> ret;
+        ret.reserve(this->m_rows.size());
+        for (auto& r : this->m_rows)
+            ret.push_back(std::get<I>(r));
+        return ret;
+    }
 };
 
-int main(int argc, char** argv) {
-    auto csv = CSV<int, char>(argv[1]);
+int main() {
+    auto csv = CSV<int, std::string>("test.csv");
     std::cout <<csv.m_headers.size() <<std::endl;
     std::cout <<csv.m_rows.size() <<std::endl;
+    constexpr_for<0, 2, 1>([&]<size_t i>() {
+        std::cout <<csv.m_headers[i] <<": ";
+        for (auto& v : csv.column<i>()) {
+            std::cout <<v <<",\t";
+        }
+        std::cout <<std::endl;
+    });
 }
