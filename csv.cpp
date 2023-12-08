@@ -5,8 +5,6 @@
 #include <vector>
 #include <tuple>
 
-// maybe in the future this code will work lol 
-
 // Parse a string to a native type
 template<class T> T parse_entry(const std::string s); // { return T{}; }
 template<> std::string parse_entry<std::string>(std::string s) {
@@ -29,7 +27,7 @@ template<> unsigned long parse_entry<unsigned long>(std::string s) {
 }
 
 // template <class F, class... Args>
-// constexpr void constexpr_for(F&& f, Args&&... args)
+// constexpr void constexpr_foreach(F&& f, Args&&... args)
 // {
 //     (f(std::forward<Args>(args)), ...);
 // }
