@@ -10,7 +10,7 @@ CREATE TABLE Users (
 CREATE TABLE Finds (
 	-- Unique Identifier
 	findId BIGINT UNSIGNED PRIMARY KEY,
-	
+
 	-- Who made the find?
 	foundByUser VARCHAR(20) REFERENCES Users.phoneNumber,
 

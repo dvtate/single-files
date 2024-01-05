@@ -26,9 +26,9 @@ struct Job {
     int m_id;       // Unique Identifier
     int m_runtime;  // Runtime in seconds
     int m_next_id;  // Next in chain
-    
+
     // Parse from CSV entry
-    explicit Job(std::string& line) {        
+    explicit Job(std::string& line) {
         // Parse id
         auto comma_idx = line.find(',');
         if (comma_idx == std::string::npos)
@@ -88,7 +88,7 @@ struct Chain {
             <<"last_job: " <<m_jobs[0].m_id <<'\n'
             <<"number_of_jobs: " <<m_jobs.size() <<'\n'
             <<"job_chain_runtime: " <<seconds_to_hms(m_runtime) <<'\n'
-            <<"average_job_time: " <<seconds_to_hms(m_runtime / m_jobs.size()) <<'\n';        
+            <<"average_job_time: " <<seconds_to_hms(m_runtime / m_jobs.size()) <<'\n';
     }
 };
 
@@ -111,7 +111,7 @@ int main() {
     while (std::getline(std::cin, line)) {
         try {
             jobs.emplace_back(line);
-        } catch (std::runtime_error& e) {            
+        } catch (std::runtime_error& e) {
             std::cout <<"Malformed Input";
             return 0;
         }

@@ -1,7 +1,3 @@
-
-
-console.log("ff");
-
 // process date command
 function get_date(stack) {
     const str = stack[stack.length - 1];
