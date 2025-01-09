@@ -483,7 +483,7 @@ async function getIps() {
     
     fs.writeFileSync('vzla_hostnames.txt','');
 
-    for (let i = 2; i < 5; i++) {
+    for (let i = 0; i < ips.length; i++) {
         const { start, end } = ips[i];
         const range = ipRange(start, end);
         const hns = (await Promise.all(range.map(rdns))).flat(2);
