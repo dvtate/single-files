@@ -58,6 +58,14 @@ public:
 
     LRUCache(int capacity): m_capacity(capacity) {
     }
+    ~LRUCache() {
+        Entry* e = m_lru_head;
+        while (e != nullptr) {
+            Entry* n = e->next;
+            delete e;
+            e = n;
+        }
+    }
     
     int get(int key) {
         auto it = m_cache.find(key);
