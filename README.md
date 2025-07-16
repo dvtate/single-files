@@ -1,14 +1,17 @@
-# single-file-programs
-Small programs I made that I think are worthy of sharing but aren't otherwise associated with a large enough project to have a dedicated repo.
+# Single Files
+Assorted code that either I think is worth sharing or I can't bring myself to delete it.
 
-## Sources
-- Technical interviews
-- Patch-jobs
-- neat algorithms
-- practice problems
-- tests
-- demos
-- hackathons
+## Categories
+- [/archive](archive/) -- code that hold sentimental value to me
+- [/benchmarks](benchmarks/) -- code used for performance benchmarking
+- [/learning](learning/) -- code written while learning things
+- [/libraries](libraries/) -- Libraries/components that could be incorporated into larger projects
+- [/planning](planning/) -- putting ideas down in code (WiP/unfinished)
+- [/programs](programs/) -- simple programs that are useful/cool/fun
+- [/puzzles](puzzles/) -- coding challenges (interviews, assignments, hackathons, etc.)
+- [/scripts](scripts/) -- scripts that might be useful again in the future
 
 ## What does it do?
-I try to include as much info as I can in the commit-descriptions. Additionally there might be a comment section that gives some explanation.
+I used to include this information in the commit descriptions but I've kinda given up on that.
+If you want to know, open an issue and I'll update the file with more comments.
+

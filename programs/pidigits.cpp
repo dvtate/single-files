@@ -54,7 +54,15 @@ struct Ctx {
 
 
 int main(int argc, char** argv) noexcept {
+    if (argc < 2) {
+        std::cerr <<"usage: ./pidigits [number of digits to calculate]\n";
+        return -1;
+    }
     const size_t n = atol(argv[1]);
+    if (n % 10 != 0) {
+        std::cerr <<"digits should be multiple of 10, remaining digits will be invalid\n";
+        return -1;
+    }
 
     Ctx ctx;
 
