@@ -1,7 +1,4 @@
-// g++ litmap_benchmark.cpp -O3 -Wall -Wextra -isystem benchmark/include   -Lbenchmark/build/src -lbenchmark -lpthread
-
 #include <benchmark/benchmark.h>
-
 #include <vector>
 #include <algorithm>
 #include <utility>
@@ -58,56 +55,8 @@ public:
         return m_table.end();
     }
 
-    // Function to implement lower_bound
-    // int lower_bound(const char* str) {
-    //     using ItType = typename std::vector<std::pair<const char*, T>>::iterator;
-    //     int mid;
-
-
-    //     // Initialise starting index and
-    //     // ending index
-    //     int low = 0;
-    //     int high = m_table.size();
-
-    //     // Till low is less than high
-    //     while (low < high) {
-    //         mid = low + (high - low) / 2;
-
-    //         auto cmp = strcmp(str, m_table[mid]);
-
-    //         // Found it
-    //         if (cmp == 0)
-    //             return mid;
-
-
-    //         // If X is less than or equal
-    //         // to arr[mid], then find in
-    //         // left subarray
-    //         if (cmp > 0) {
-    //             high = mid;
-    //         }
-
-    //         // If X is greater arr[mid]
-    //         // then find in right subarray
-    //         else {
-    //             low = mid + 1;
-    //         }
-    //     }
-    
-    //     // if X is greater than arr[n-1]
-    //     if(low < m_table.size() && m_table[low] < X) {
-    //         low++;
-    //     }
-        
-    //     // Return the lower_bound index
-    //     return low;
-    // }
-
-    int str_view_cmp(const char* c, const char* start, const char* end) {
-        
-    }
-
-    // typename std::vector<std::pair<const char*, T>>::iterator find(const char* str, size_t len) {
+    // TODO handle non-null-terminated strings
+    // typename std::vector<std::pair<const char*, T>>::iterator find(std::string_view str) {
     //     auto first = m_table.begin();
     //     auto count = std::distance(first, m_table.end());
     
@@ -131,7 +80,6 @@ public:
     //     //     return m_table.end();
     //     return first;
     // }
-
 
     T* get(const char* str) {
         auto it = find(str);
@@ -208,7 +156,7 @@ const char* method_strs[] {
     "CONNECT", "OPTIONS", "TRACE", "COPY", "LOCK",
     "MKCOL", "MOVE", "PROPFIND", "PROPPATCH", "SEARCH",
     "UNLOCK", "BIND", "REBIND", "UNBIND", "ACL",
-    "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH",
+    "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "M-SEARCH",
     "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE",
     "MKCALENDAR", "LINK", "UNLINK", "INVALID", "ERR"
 };
@@ -406,9 +354,7 @@ static void unordered_map_string_view(benchmark::State& state) {
 }
 BENCHMARK(unordered_map_string_view);
 
-
-// this is the fastest but it's kinda cheating
-
+// This is the fastest but it's kinda cheating
 static void unordered_map_c_str(benchmark::State& state) {
     // Custom hash function for const char* that only uses first 4 chars
     // - Lots of collisions but faster lookups
@@ -444,5 +390,240 @@ static void unordered_map_c_str(benchmark::State& state) {
 }
 BENCHMARK(unordered_map_c_str);
 
+// Modified code from boost.beast
+Method string_to_method(std::string_view v) {
+/*
+    ACL
+    BIND
+    CHECKOUT
+    CONNECT
+    COPY
+    DELETE
+    GET
+    HEAD
+    LINK
+    LOCK
+    M-SEARCH
+    MERGE
+    MKACTIVITY
+    MKCALENDAR
+    MKCOL
+    MOVE
+    NOTIFY
+    OPTIONS
+    PATCH
+    POST
+    PROPFIND
+    PROPPATCH
+    PURGE
+    PUT
+    REBIND
+    REPORT
+    SEARCH
+    SUBSCRIBE
+    TRACE
+    UNBIND
+    UNLINK
+    UNLOCK
+    UNSUBSCRIBE
+*/
+    if(v.size() < 3)
+        return Method::Invalid;
+    auto c = v[0];
+    v.remove_prefix(1);
+    switch(c)
+    {
+    case 'A':
+        if(v == std::string_view("CL"))
+            return Method::Acl;
+        break;
+
+    case 'B':
+        if(v == std::string_view("IND"))
+            return Method::Bind;
+        break;
+
+    case 'C':
+        c = v[0];
+        v.remove_prefix(1);
+        switch(c)
+        {
+        case 'H':
+            if(v == std::string_view("ECKOUT"))
+                return Method::Checkout;
+            break;
+
+        case 'O':
+            if(v == std::string_view("NNECT"))
+                return Method::Connect;
+            if(v == std::string_view("PY"))
+                return Method::Copy;
+            [[fallthrough]];
+
+        default:
+            break;
+        }
+        break;
+
+    case 'D':
+        if(v == std::string_view("ELETE"))
+            return Method::Delete;
+        break;
+
+    case 'G':
+        if(v == std::string_view("ET"))
+            return Method::Get;
+        break;
+
+    case 'H':
+        if(v == std::string_view("EAD"))
+            return Method::Head;
+        break;
+
+    case 'L':
+        if(v == std::string_view("INK"))
+            return Method::Link;
+        if(v == std::string_view("OCK"))
+            return Method::Lock;
+        break;
+
+    case 'M':
+        c = v[0];
+        v.remove_prefix(1);
+        switch(c)
+        {
+        case '-':
+            if(v == std::string_view("SEARCH"))
+                return Method::Msearch;
+            break;
+
+        case 'E':
+            if(v == std::string_view("RGE"))
+                return Method::Merge;
+            break;
+
+        case 'K':
+            if(v == std::string_view("ACTIVITY"))
+                return Method::Mkactivity;
+            if(v[0] == 'C')
+            {
+                v.remove_prefix(1);
+                if(v == std::string_view("ALENDAR"))
+                    return Method::Mkcalendar;
+                if(v == std::string_view("OL"))
+                    return Method::Mkcol;
+                break;
+            }
+            break;
+
+        case 'O':
+            if(v == std::string_view("VE"))
+                return Method::Move;
+            [[fallthrough]];
+
+        default:
+            break;
+        }
+        break;
+
+    case 'N':
+        if(v == std::string_view("OTIFY"))
+            return Method::Notify;
+        break;
+
+    case 'O':
+        if(v == std::string_view("PTIONS"))
+            return Method::Options;
+        break;
+
+    case 'P':
+        c = v[0];
+        v.remove_prefix(1);
+        switch(c)
+        {
+        case 'A':
+            if(v == std::string_view("TCH"))
+                return Method::Patch;
+            break;
+
+        case 'O':
+            if(v == std::string_view("ST"))
+                return Method::Post;
+            break;
+
+        case 'R':
+            if(v == std::string_view("OPFIND"))
+                return Method::Propfind;
+            if(v == std::string_view("OPPATCH"))
+                return Method::Proppatch;
+            break;
+
+        case 'U':
+            if(v == std::string_view("RGE"))
+                return Method::Purge;
+            if(v == std::string_view("T"))
+                return Method::Put;
+            [[fallthrough]];
+
+        default:
+            break;
+        }
+        break;
+
+    case 'R':
+        if(v[0] != 'E')
+            break;
+        v.remove_prefix(1);
+        if(v == std::string_view("BIND"))
+            return Method::Rebind;
+        if(v == std::string_view("PORT"))
+            return Method::Report;
+        break;
+
+    case 'S':
+        if(v == std::string_view("EARCH"))
+            return Method::Search;
+        if(v == std::string_view("UBSCRIBE"))
+            return Method::Subscribe;
+        break;
+
+    case 'T':
+        if(v == std::string_view("RACE"))
+            return Method::Trace;
+        break;
+
+    case 'U':
+        if(v[0] != 'N')
+            break;
+        v.remove_prefix(1);
+        if(v == std::string_view("BIND"))
+            return Method::Unbind;
+        if(v == std::string_view("LINK"))
+            return Method::Unlink;
+        if(v == std::string_view("LOCK"))
+            return Method::Unlock;
+        if(v == std::string_view("SUBSCRIBE"))
+            return Method::Unsubscribe;
+        break;
+
+    default:
+        break;
+    }
+
+    return Method::Invalid;
+}
+
+
+static void boost_switch(benchmark::State& state) {
+    
+  // Code before the loop is not measured
+  for (auto _ : state) {
+    for (const auto& [k , v] : g_tcs) {
+        auto test = string_to_method(k.c_str()) == v;
+        benchmark::DoNotOptimize(test);
+    }
+  }
+}
+BENCHMARK(boost_switch);
 
 BENCHMARK_MAIN();
