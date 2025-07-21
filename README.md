@@ -11,7 +11,7 @@ Assorted code that either I think is worth sharing or I can't bring myself to de
 - [/puzzles](puzzles/) -- coding challenges (interviews, assignments, hackathons, etc.)
 - [/scripts](scripts/) -- scripts that might be useful again in the future
 
-## What does it do?
-I used to include this information in the commit descriptions but I've kinda given up on that.
-If you want to know, open an issue and I'll update the file with more comments.
-
+## What does this file do?
+Check the READMEs in the various categorized folders. I used to include some documentation
+in commit descriptions but I gave up on that and it was hard to find anyways. Feel free to
+open an issue and I'll be happy tell you what I can.

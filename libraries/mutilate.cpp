@@ -24,9 +24,6 @@ namespace mutilator {
 			id_cpy /= 62;
 			if (id_cpy == 0) break;
 		}
-		
-
-
 
 		char* ret = (char*) calloc(strlen(cur_name) + 3 + L_REF_MUTILATOR - i, sizeof(char));
 
