@@ -9,6 +9,7 @@ These are mostly one-off scripts that I'm keeping for reference.
 - [forms.sh](populate_forms.sh) -- Fills in a bunch of similar PDF forms from a template + text overlay
 - [search_bot.vbs](search_bot.vbs) -- an attempt at influencing Google search trends
 - [Strategy Generator](strategy_gen.js) -- Generates a bunch of random trading strategies
+- [tzdb.cpp](tzdb_json.cpp) -- Outputs the the timezone database in JSON format
 - [riot api id update](update_riotapi_ids.js) -- Updates Riot API user IDs to new system
 - [vzla_hns.js](vzla_hns.js) -- tries to find hostnames associated with Venezuelan IP addresses
 - [xmrig.sh](xmrig.sh) -- Script modified from suragu to patch, build and start xmrig mining software

@@ -2,6 +2,7 @@
 These could be useful as components in a larger projects (probably with modifications).
 
 - [CSV](csv.cpp) -- Typed CSV parser in modern C++
+- [FileCache.hpp](FileCache.hpp) -- Lazily caches files in static memory
 - [LL.ts](ll.ts) -- Linked List implementation in TypeScript
 - [matrix.hpp](matrix.hpp) -- Easy to use math matrix implementation in C++ that abuses templates
 - [MentionsExpr](mentions.hpp) -- Mentions expression parser
