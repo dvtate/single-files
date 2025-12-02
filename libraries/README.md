@@ -1,6 +1,7 @@
 # Libraries
 These could be useful as components in a larger projects (probably with modifications).
 
+- [CGI.hpp](CGI.hpp) -- A Simple Common Gateway Interface (CGI/1.1) script runner library
 - [CSV](csv.cpp) -- Typed CSV parser in modern C++
 - [FileCache.hpp](FileCache.hpp) -- Lazily caches files in static memory
 - [LL.ts](ll.ts) -- Linked List implementation in TypeScript
